@@ -1,0 +1,255 @@
+using GameName.Managers;
+using System;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class GameManager : MonoBehaviour
+{
+    [Header("코인 저장 값 초기화")]
+    public bool isReset; //디버깅용
+
+    public static GameManager Instance { get; private set; }
+
+    // Managers
+    public UIManager UI { get; set; }
+    public PowerUpManager PowerUp { get; set; }
+    // todo: 추가
+
+    // 플레이어
+    [SerializeField] private GameObject _player;
+    public GameObject Player { get { return _player; } set { _player = value; } }
+
+    // 현재 획득한 총 코인 개수
+    private int totalCoinCount = 0;
+    public int TotalCoinCount
+    {
+        get { return totalCoinCount; }
+        private set
+        {
+            if (value < 0)
+            {
+                Logger.Log("코인 개수 부족");
+                return;
+            }
+
+            totalCoinCount = value;
+            Logger.Log($"현재 코인 개수: {totalCoinCount}");
+
+            UIManager.Instance.CoinUI.UpdateCoinText(totalCoinCount);
+        }
+    }
+
+    // 업적
+    private int currentScore = 0; //현재 스코어
+    private int getItemCount = 0; //획득한 아이템 수
+    private int buyCharacterCount = 0; //구매한 캐릭터 수
+
+    [SerializeField]
+    private AchievementManager achievementManager;
+
+    //// 이벤트 통신
+    public event Action<int> OnScoreChanged; // 점수가 변경될 때 외부에 알림
+    //public event Action<string> OnAchievementUnlocked; // 업적이 잠금 해제될 때 외부에 알림
+
+    // 스킨 정보
+    [Header("스킨 정보")]
+    [SerializeField] private int _curSkinIndex;
+    public int CurSkinIndex
+    {
+        get { return _curSkinIndex; }
+        set
+        {
+            if (_curSkinIndex == value)
+            {
+                Logger.Log("동일한 스킨 선택");
+                return;
+            }
+
+            _curSkinIndex = value;
+            OnSkinIndexChanged?.Invoke(_curSkinIndex);
+        }
+    }
+    public event Action<int> OnSkinIndexChanged;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // 씬 전환에도 유지
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        LoadData();
+        Init();
+    }
+
+    private void Start()
+    {
+        InitPlayer();
+    }
+
+    private void Init()
+    {
+        UI = GetComponentInChildren<UIManager>();
+        PowerUp = GetComponentInChildren<PowerUpManager>();
+    }
+
+    private void InitPlayer()
+    {
+        Player = FindObjectOfType<PlayerCollider>().gameObject;
+        PowerUp.Init(Player);
+    }
+
+    public void AddScore(int amount)
+    {
+        if (amount <= 0) return;
+        currentScore += amount;
+        OnScoreChanged?.Invoke(currentScore);
+        EarnCoin(amount);
+        UnityEngine.Debug.Log($"코인 획득! 현재 스코어: {currentScore}");
+    }
+
+    public void ScoreReset()
+    {
+        currentScore = 0;
+        OnScoreChanged?.Invoke(currentScore);
+    }
+
+    #region 코인 관리
+    // 코인을 획득할 때 호출되는 메서드
+    public void EarnCoin(int amount)
+    {
+        if (amount < 0) return;
+        totalCoinCount += amount;
+        UnityEngine.Debug.Log($"코인 획득! 현재 총 코인: {totalCoinCount}");
+        UIManager.Instance.CoinUI.UpdateCoinText(totalCoinCount); //코인 UI에 반영
+
+        // 코인 개수가 변경될 때마다 업적 해금 조건을 검사
+        if (achievementManager != null)
+        {
+            achievementManager.CheckAchievements(totalCoinCount, AchievementType.CoinAcquisition);
+        } // <- 업적 해금 방법. 다른 업적(아이템 사용, 아이템 구매하는) 함수에 위의 코드를 가져다 쓰면 됨
+    }
+
+    public bool CheckSpendCoinAndGetSkin(int amount)
+    {
+        Logger.Log($"코인 {amount}개 사용");
+
+        if (totalCoinCount > amount)
+        {
+            TotalCoinCount -= amount;
+            return true;
+        }
+        else
+        {
+            Logger.Log("코인 부족");
+            return false;
+        }
+    }
+
+    public void ResetCoin()
+    {
+        TotalCoinCount = 0;
+    }
+    #endregion
+
+    #region 업적
+    public void EarnItem(int amount)
+    {
+        if (amount < 0) return;
+        getItemCount += amount;
+        UnityEngine.Debug.Log($"아이템 사용! 현재 사용한 아이템 수: {getItemCount}");
+        if (achievementManager != null)
+        {
+            achievementManager.CheckAchievements(getItemCount, AchievementType.UseItem);
+        }
+    }
+
+    public void EarnCharacter(int amount)
+    {
+        if (amount < 0) return;
+        buyCharacterCount += amount;
+        UnityEngine.Debug.Log($"캐릭터 구매! 구매된 캐릭터 수: {buyCharacterCount}");
+        if (achievementManager != null)
+        {
+            achievementManager.CheckAchievements(buyCharacterCount, AchievementType.BuySomething);
+        }
+    }
+    #endregion
+
+    #region 데이터 관리
+    private void LoadData()
+    {
+        if (isReset)
+        {
+            totalCoinCount = 0;
+            return;
+        }
+        totalCoinCount = PlayerPrefs.GetInt("CurrentCoin", 0);
+        getItemCount = PlayerPrefs.GetInt("CurrentUseItem", 0);
+        buyCharacterCount = PlayerPrefs.GetInt("CurrentBuyCharacter", 0);
+        _finishedTutorial = PlayerPrefs.GetInt(_finishiedTutorialKey, 0) == 0 ? false : true;
+        EarnCoin(0);
+        EarnItem(0);
+        EarnCharacter(0);
+    }
+
+    public void SaveData()
+    {
+        PlayerPrefs.SetInt("CurrentCoin", totalCoinCount);
+        PlayerPrefs.SetInt("CurrentUseItem", getItemCount);
+        PlayerPrefs.SetInt("CurrentBuyCharacter", buyCharacterCount);
+        PlayerPrefs.Save();
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveData();
+    }
+    #endregion
+
+    #region 씬 관리
+    public void GameReload()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.LoadScene(SceneType.GameScene.ToString());
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        // ui 로딩
+        UIManager ui = UIManager.Instance;
+        ui.Camera = Camera.main;
+        ui.SetSceneLoadMode();
+        ui.TutorialUI.Init();
+
+        InitPlayer();
+    }
+    #endregion
+
+    #region 튜토리얼
+    private bool _finishedTutorial = false;
+    public bool FinishedTutorial => _finishedTutorial;
+    private string _finishiedTutorialKey = "FinishTutorial";
+
+    public void EndTutorial()
+    {
+        Logger.Log("튜토리얼 완료");
+        _finishedTutorial = true;
+        PlayerPrefs.SetInt(_finishiedTutorialKey, (_finishedTutorial ? 1 : 0));
+        PlayerPrefs.Save();
+    }
+
+    public void ResetTutorial()
+    {
+        _finishedTutorial = false;
+    }
+    #endregion
+}
+
