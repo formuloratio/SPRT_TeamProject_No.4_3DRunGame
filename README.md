@@ -107,9 +107,22 @@
 ### 스크립트
 ---
 
+
+---
+
 ## 트러블슈팅
 
+### 1. 코인 획득 업적이 해금되었을 때 다른 업적들도 해금되는 버그
+* 문제 :
+  * 업적에 따라 타입을 구분하였지만, 타입과 상관없이 코인 업적 해금 시에 다른 업적들도 같이 해금되는 현상이 발생했다.
+* 해결 :
+  * 타입을 받아오는 시점과 비교 대상의 매칭 오류였고, 코드를 하나하나 순서대로 디버깅해보면서 foreach에서 탐색된 타입과 구분하는 switch의 조건문의 매개변수가 일치하지 않는 것들 확인되어 수정하였다.
 
+### 2. 깃허브로 최종 합병 시에 발생한 충돌 문제
+* 문제 :
+  * 주어진 과제 내의 기능들을 중심으로 분량에 맞춰서 배분하려다 보니 한정된 기능 설계에서 겹치게 되는 기능들이 존재했고 이러했을 때 나타날 수 있는 합병 문제를 예방하기 위한 스크립트의 기초 설계를 하지 않고 각자 작업을 시작하였다.
+* 해결 :
+  * 꼬박 하루를 투자하여 팀 내 소통을 통해 순차적으로 병합을 진행하였다.
 
 ---
 
@@ -155,10 +168,10 @@
     <th align="left" width="180"> 항목 </th>
     <th align="left" width="500"> 내용 </th>
   </tr>
-  <tr><td> 효과음 </td><td> [UI Sfx 8-Bit Pack](https://assetstore.unity.com/packages/audio/sound-fx/ui-sfx-8-bit-pack-320299?locale=ko-KR&srsltid=AfmBOorkMfzVpU24cLQUs4O-WtSg-pNRcvq6jHJLz2NM_Q7dzAzFz5aL) </td></tr>
-  <tr><td> 배경음 </td><td> [RACER MUSIX 20](https://assetstore.unity.com/packages/audio/music/racer-musix-20-house-dance-techno-atmospheric-retro-racing-game--332174?srsltid=AfmBOoodPMH_2y0LYa_xg4W6BR-l7qNfJA8KWNJIxWUoaf8lT0fGB3JX) </td></tr>
-  <tr><td> 맵 구성 </td><td> [KayKit : City Builder Bits](https://kaylousberg.itch.io/city-builder-bits) </td></tr>
-  <tr><td> 캐릭터 </td><td> [KayKit - Character Pack : Adventurers](https://kaylousberg.itch.io/kaykit-adventurers) </td></tr>
-  <tr><td> 애니메이션 </td><td> [KayKit - Character Animations](https://kaylousberg.itch.io/kaykit-character-animations) </td></tr>
+  <tr><td> 효과음 </td><td> [UI Sfx 8-Bit Pack] (https://assetstore.unity.com/packages/audio/sound-fx/ui-sfx-8-bit-pack-320299?locale=ko-KR&srsltid=AfmBOorkMfzVpU24cLQUs4O-WtSg-pNRcvq6jHJLz2NM_Q7dzAzFz5aL) </td></tr>
+  <tr><td> 배경음 </td><td> [RACER MUSIX 20] (https://assetstore.unity.com/packages/audio/music/racer-musix-20-house-dance-techno-atmospheric-retro-racing-game--332174?srsltid=AfmBOoodPMH_2y0LYa_xg4W6BR-l7qNfJA8KWNJIxWUoaf8lT0fGB3JX) </td></tr>
+  <tr><td> 맵 구성 </td><td> [KayKit : City Builder Bits] (https://kaylousberg.itch.io/city-builder-bits) </td></tr>
+  <tr><td> 캐릭터 </td><td> [KayKit - Character Pack : Adventurers] (https://kaylousberg.itch.io/kaykit-adventurers) </td></tr>
+  <tr><td> 애니메이션 </td><td> [KayKit - Character Animations] (https://kaylousberg.itch.io/kaykit-character-animations) </td></tr>
   <tr><td> 그 외 </td><td> AI </td></tr>
 </table>
