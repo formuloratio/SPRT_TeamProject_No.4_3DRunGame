@@ -63,129 +63,102 @@
   * PowerUpSpawner에서 파워업 아이템 랜덤 스폰.
   * SpeedBoostPowerUp에서 스피드 부스트 파워업 아이템 관리.
 - Shop
-  * CharacterSlot에서 캐릭터 SkinData(SO) 관리
-  * ShopController에서 상점 회전, 캐릭터 슬롯 관리
-- StatHandler로 플레이어 캐릭터의 모든 능력치를 관리.
-- ScriptableObject로 정의한 캐릭터, 적, 무기, 장비, 아이템, 페이즈, 스킬
-- 각 효과의 사운드와 이미지, UI. 중복 재생을 막기 위한 쿨다운 기능. 
-- ObjectPoolManager에서 사용할 프리팹을 미리 생성하고 관리.
-- SO로 정의한 데이터를 이용한 적 자동 생성 기능.
+  * CharacterSlot에서 캐릭터 SkinData(SO) 관리.
+  * ShopController에서 상점 회전, 캐릭터 슬롯 관리.
+- UI
+  * ButtonUI에서 버튼 관리.
+  * SettingUI에서 환경 설정 (오디오 조정).
+  * Tutorial에서 튜토리얼 UI 관리.
+  * ScoreUI에서 점수 창 (최고 점수, 현재 점수) 관리.
+  * ShopUI에서 상점 버튼 관리.
+  * AchievementUI에서 업적 창 관리.
+  * GameOverUI에서 게임오버 창 관리.
+- Scriptable Objects
+  * AchievementData는 업적 데이터
+  * CharacterSkinData는 캐릭터 스킨 데이터
+  * PowerUpData는 버프 데이터
+  * SoundData는 사운드 데이터
+- Etc
+  * Define는 상수 관리
+  * Extensions는 확장 메서드
+  * Logger는 커스텀 로그
 
 ---
 
-### 6. UI
+## 역할분담
 
 <table>
   <tr>
-    <th align="left" width="200">코드 이름</th>
-    <th align="left" width="500">역할</th>
+    <th align="left" width="180"> 이름 </th>
+    <th align="left" width="500"> 역할 </th>
   </tr>
-  <tr><td>AchievementUI</td><td>업적 창</td></tr>
-  <tr><td>ButtonUI</td><td>버튼 관리</td></tr>
-  <tr><td>CoinUI</td><td>코인</td></tr>
-  <tr><td>GameOverUI</td><td>게임오버 창</td></tr>
-  <tr><td>PauseUI</td><td>일시정지 창</td></tr>
-  <tr><td>ScoreUI</td><td>점수 창 (최고 점수, 현재 점수)</td></tr>
-  <tr><td>SettingUI</td><td>환경 설정 (오디오 조정)</td></tr>
-  <tr><td>ShopUI</td><td>상점 버튼</td></tr>
-  <tr><td>Tutorial</td><td>튜토리얼 UI</td></tr>
-</table>
-
-### 7. Scriptable Objects
-
-<table>
-  <tr>
-    <th align="left" width="200">코드 이름</th>
-    <th align="left" width="500">역할</th>
-  </tr>
-  <tr><td>AchievementData</td><td>업적 데이터</td></tr>
-  <tr><td>CharacterSkinData</td><td>캐릭터 스킨 데이터</td></tr>
-  <tr><td>PowerUpData</td><td>파워업(버프) 데이터</td></tr>
-  <tr><td>SoundData</td><td>사운드 데이터</td></tr>
-</table>
-
-### 8. Etc
-
-<table>
-  <tr>
-    <th align="left" width="200">코드 이름</th>
-    <th align="left" width="500">역할</th>
-  </tr>
-  <tr><td>Define</td><td>상수 관리</td></tr>
-  <tr><td>Extensions</td><td>확장 메서드</td></tr>
-  <tr><td>Logger</td><td>커스텀 로그</td></tr>
+  <tr><td> 조현일 </td><td> 사운드, 버프 아이템 </td></tr>
+  <tr><td> 신주은 </td><td> UI, 상점, 튜토리얼 </td></tr>
+  <tr><td> 엄성진 </td><td> 업적 시스템, 코인 및 스코어 처리 </td></tr>
+  <tr><td> 이요한 </td><td> 배경 이동, 장애물 충돌 처리 </td></tr>
+  <tr><td> 함승효 </td><td> 플레이어 이동 </td></tr>
 </table>
 
 ---
 
-## [기능 설명]
+## 구현내용 [엄성진]
 
-### 1. 캐릭터
 
-- 움직임
-  - 이동 (AD)
-  - 점프, 이단 점프 (Space)
-  - 슬라이딩 (Control)
-- 애니메이션 적용
+### 스크립트
+---
 
-![Movement](Docs/Img/Movement.gif)
+## 트러블슈팅
 
-### 2. 맵
 
-- 배경 무한 생성
-  - `LastPivot`, `DeadZone`을 통해 맵 무한 생성
-
-![MapLoop](Docs/Img/MapLoop.gif)
-
-- 장애물 충돌
-
-![Collision](Docs/Img/Collision.gif)
-
-- 코인 획득
-
-### 3. 버프
-
-- 버프 적용 (무적, 스피드 업)
-
-![Invincibility](Docs/Img/Invincibility.gif)
-![SpeedBoost](Docs/Img/SpeedBoost.gif)
-
-### 4. 상점
-
-- 캐릭터 선택, 구매
-- 캐릭터 커스터마이징
-
-![Shop](Docs/Img/Shop.gif)
-
-### 5. 업적
-
-- 업적 해금
-
-![Achievement](Docs/Img/Achievement.jpg)
-
-### 6. 튜토리얼
-
-- 튜툐리얼
-
-![Tutorial](Docs/Img/Tutorial.gif)
-
-### 7. 로딩 씬
-
-![Loading](Docs/Img/Loading.jpg)
-
-### 8. 기타
-
-- 설정
-  - 음향 조절 가능
-
-## [트러블슈팅]
-
-> 개발 중 발생한 주요 이슈 및 해결 과정을 정리했습니다.  
-> 각 항목은 별도 TIL 또는 블로그 포스트로 링크됩니다.
-
-| 주제                   | 해결 요약                                      | 링크     |
-| ---------------------- | ---------------------------------------------- | -------- |
-| 파괴된 오브젝트에 접근 | 사용하기 전에 NULL 체크하고 캐싱하기           | [🔗 -]() |
-| 태그 오류              | GameManager에서 타입으로 탐색 및 캐싱하여 사용 | [🔗 -]() |
 
 ---
+
+## 기술스택
+
+<table>
+  <tr>
+    <th align="left" width="180"> 구분 </th>
+    <th align="left" width="500"> 기술 </th>
+  </tr>
+  <tr>
+    <td>Language</td>
+    <td><img src="https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white"></td>
+  </tr>
+  <tr>
+    <td>Framework</td>
+    <td><img src="https://img.shields.io/badge/unity-FFFFFF?style=for-the-badge&logo=unity&logoColor=black"></td>
+  </tr>
+  <tr>
+    <td>IDE</td>
+    <td><img src="https://img.shields.io/badge/Visual%20Studio-5C2D91?style=for-the-badge&logo=visualstudio&logoColor=white"></td>
+  </tr>
+  <tr>
+    <td>Version Control</td>
+    <td><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></td>
+  </tr>
+  <tr>
+    <td>Design</td>
+    <td><img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"></td>
+  </tr>
+  <tr>
+    <td>Documentation</td>
+    <td><img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white"></td>
+  </tr>
+</table>
+
+---
+
+## 사용에셋 목록
+
+<table>
+  <tr>
+    <th align="left" width="180"> 항목 </th>
+    <th align="left" width="500"> 내용 </th>
+  </tr>
+  <tr><td> 효과음 </td><td> [UI Sfx 8-Bit Pack](https://assetstore.unity.com/packages/audio/sound-fx/ui-sfx-8-bit-pack-320299?locale=ko-KR&srsltid=AfmBOorkMfzVpU24cLQUs4O-WtSg-pNRcvq6jHJLz2NM_Q7dzAzFz5aL) </td></tr>
+  <tr><td> 배경음 </td><td> [RACER MUSIX 20](https://assetstore.unity.com/packages/audio/music/racer-musix-20-house-dance-techno-atmospheric-retro-racing-game--332174?srsltid=AfmBOoodPMH_2y0LYa_xg4W6BR-l7qNfJA8KWNJIxWUoaf8lT0fGB3JX) </td></tr>
+  <tr><td> 맵 구성 </td><td> [KayKit : City Builder Bits](https://kaylousberg.itch.io/city-builder-bits) </td></tr>
+  <tr><td> 캐릭터 </td><td> [KayKit - Character Pack : Adventurers](https://kaylousberg.itch.io/kaykit-adventurers) </td></tr>
+  <tr><td> 애니메이션 </td><td> [KayKit - Character Animations](https://kaylousberg.itch.io/kaykit-character-animations) </td></tr>
+  <tr><td> 그 외 </td><td> AI </td></tr>
+</table>
