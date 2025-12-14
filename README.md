@@ -19,7 +19,7 @@
     <th align="left" width="180"> 항목 </th>
     <th align="left" width="500"> 내용 </th>
   </tr>
-  <tr><td> 장르 </td><td> 횡스크롤 3D 러닝 액션 게임 </td></tr>
+  <tr><td> 장르 </td><td> 횡스크롤 3D 러닝 액션 </td></tr>
   <tr><td> 소개 </td><td> 좌우와 점프, 슬라이드 조작을 통해 장애물들을 피해 달리면서 돈을 먹어 점수를 올리는 게임 </td></tr>
   <tr><td> 개발 기간 </td><td> 총 7일 { 2025.11.14 ~ 2025.11.21 } </td></tr>
 </table>
