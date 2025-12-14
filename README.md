@@ -36,74 +36,42 @@
 - 획득한 돈으로 캐릭터 스킨을 구매할 수 있는 상점이 존재하며 스킨 적용이 가능.
 - 획득한 돈, 사용된 아이템, 구매한 캐릭터 스킨의 개수에 따른 업적 해금 시스템이 존재.
 
+<img width="1592" height="890" alt="스크린샷 2025-12-14 183312" src="https://github.com/user-attachments/assets/751a992b-b182-4d32-809c-d4c836a9a031" />
+<img width="1592" height="893" alt="스크린샷 2025-12-14 183242" src="https://github.com/user-attachments/assets/a0ae66f1-6b13-402c-93f5-46d7034dcf67" />
+<img width="1593" height="892" alt="스크린샷 2025-12-14 183258" src="https://github.com/user-attachments/assets/b007130b-de45-4483-bcdc-afd9ac49add2" />
+<img width="1594" height="893" alt="스크린샷 2025-12-14 183152" src="https://github.com/user-attachments/assets/f6ffa066-f9ab-4e92-aebd-783cc6f8e231" />
+<img width="1595" height="892" alt="스크린샷 2025-12-14 183344" src="https://github.com/user-attachments/assets/6bcde032-f5e4-4dfd-87af-7821df488657" />
 
+### 핵심기술
+- Managers
+  * GameManager에서 코인, 점수, 데이터, 업적, 씬 등 주요 값 관리.
+  * AchievementManager에서 업적 관리.
+  * AudioManager에서 사운드(배경음, 효과음) 관리.
+  * PowerUpManager에서 버프 관리.
+  * UIManager에서 UI 관리.
+- Map
+  * MapMove에서 맵 이동 관리, 생성 파괴 관리.
+  * PlayerCollider에서 장애물 충돌 처리.
+  * Coin에서 충돌 시 점수 획득.
+- Player
+  * CustomizingController에서 커스터마이징 시 저장되어야 하는 정보 전달.
+  * PlayerAnimation에서 플레이어 애니메이션 관리.
+- PowerUp
+  * PowerUpBase에서 파워업 아이템의 기본 클래스.
+  * PowerUpItem에서 필드에 배치되는 파워업 아이템 관리.
+  * InvincibilityPowerUp에서 무적 파워업 아이템 관리.
+  * PowerUpSpawner에서 파워업 아이템 랜덤 스폰.
+  * SpeedBoostPowerUp에서 스피드 부스트 파워업 아이템 관리.
+- Shop
+  * CharacterSlot에서 캐릭터 SkinData(SO) 관리
+  * ShopController에서 상점 회전, 캐릭터 슬롯 관리
+- StatHandler로 플레이어 캐릭터의 모든 능력치를 관리.
+- ScriptableObject로 정의한 캐릭터, 적, 무기, 장비, 아이템, 페이즈, 스킬
+- 각 효과의 사운드와 이미지, UI. 중복 재생을 막기 위한 쿨다운 기능. 
+- ObjectPoolManager에서 사용할 프리팹을 미리 생성하고 관리.
+- SO로 정의한 데이터를 이용한 적 자동 생성 기능.
 
-## [코드 설명]
-
-> 일부 중요 코드만 설명합니다
-
-### 1. Managers
-
-<table>
-  <tr>
-    <th align="left" width="200">코드 이름</th>
-    <th align="left" width="500">역할</th>
-  </tr>
-  <tr><td>AchievementManager</td><td>업적 관리</td></tr>
-  <tr><td>AudioManager</td><td>사운드(배경음, 효과음) 관리</td></tr>
-  <tr><td>CharacterSkinManager</td><td>---</td></tr>
-  <tr><td>GameManager</td><td>코인, 점수, 데이터, 업적, 씬 등 주요 값 관리</td></tr>
-  <tr><td>PowerUpManager</td><td>버프 관리</td></tr>
-  <tr><td>UIManager</td><td>UI 관리</td></tr>
-</table>
-
-### 2. Map
-
-<table>
-  <tr>
-    <th align="left" width="200">코드 이름</th>
-    <th align="left" width="500">역할</th>
-  </tr>
-  <tr><td>MapMove</td><td>맵 이동 관리, 생성 파괴 관리</td></tr>
-  <tr><td>PlayerCollider</td><td>장애물 충돌 처리</td></tr>
-  <tr><td>Coin</td><td>충돌 시 점수 획득</td></tr>
-</table>
-
-### 3. Player
-
-<table>
-  <tr>
-    <th align="left" width="200">코드 이름</th>
-    <th align="left" width="500">역할</th>
-  </tr>
-  <tr><td>CustomizingController</td><td>커스터마이징 시 저장되어야 하는 정보 전달</td></tr>
-  <tr><td>PlayerAnimation</td><td>플레이어 애니메이션 관리</td></tr>
-</table>
-
-### 4. PowerUp
-
-<table>
-  <tr>
-    <th align="left" width="200">코드 이름</th>
-    <th align="left" width="500">역할</th>
-  </tr>
-  <tr><td>InvincibilityPowerUp</td><td>무적 파워업 아이템</td></tr>
-  <tr><td>PowerUpBase</td><td>파워업 아이템의 기본 클래스</td></tr>
-  <tr><td>PowerUpItem</td><td>필드에 배치되는 파워업 아이템</td></tr>
-  <tr><td>PowerUpSpawner</td><td>파워업 랜덤 스포너</td></tr>
-  <tr><td>SpeedBoostPowerUp</td><td>스피드 부스트 파워업 아이템</td></tr>
-</table>
-
-### 5. Shop
-
-<table>
-  <tr>
-    <th align="left" width="200">코드 이름</th>
-    <th align="left" width="500">역할</th>
-  </tr>
-  <tr><td>CharacterSlot</td><td>캐릭터 SkinData(SO) 관리</td></tr>
-  <tr><td>ShopController</td><td>상점 회전, 캐릭터 슬롯 관리</td></tr>
-</table>
+---
 
 ### 6. UI
 
