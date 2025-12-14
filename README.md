@@ -1,139 +1,42 @@
-# ThreadRun
-
----
+# 게임명: ThreadRun
+<img width="1593" height="892" alt="스크린샷 2025-12-14 183116" src="https://github.com/user-attachments/assets/1319a4db-3fb7-4be0-9560-12387a858d8c" />
 
 ## 📑 목차
-
-- [발표 자료 & 문서](#발표-자료--문서)
-- [프로젝트 개요](#프로젝트-개요)
-- [프로젝트 설명](#프로젝트-설명)
-  - [1. Tech Stack](#1-tech-stack)
-  - [2. 와이어프레임](#2-와이어프레임)
-- [코드 설명](#코드-설명)
-  <table>
-    <tr>
-      <td align="center" width="120">1</td>
-      <td align="center" width="120">2</td>
-      <td align="center" width="120">3</td>
-      <td align="center" width="120">4</td>
-      <td align="center" width="120">5</td>
-      <td align="center" width="120">6</td>
-      <td align="center" width="120">7</td>
-      <td align="center" width="120">8</td>
-    </tr>
-    <tr>
-      <td align="center" width="120"><a href="#1-managers">Managers</a></td>
-      <td align="center" width="120"><a href="#3-player">Player</a></td>
-      <td align="center" width="120"><a href="#2-map">Map</a></td>
-      <td align="center" width="120"><a href="#4-powerup">PowerUp</a></td>
-      <td align="center" width="120"><a href="#5-shop">Shop</a></td>
-      <td align="center" width="120"><a href="#6-ui">UI</a></td>
-      <td align="center" width="120"><a href="#7-scriptable-objects">SO</a></td>
-      <td align="center" width="120"><a href="#8-etc">Etc</a></td>
-    </tr>
-  </table>
-
-- [기능 설명](#기능-설명)
-  <table>
-    <tr>
-      <td align="center" width="120">1</td>
-      <td align="center" width="120">2</td>
-      <td align="center" width="120">3</td>
-      <td align="center" width="120">4</td>
-      <td align="center" width="120">5</td>
-      <td align="center" width="120">6</td>
-      <td align="center" width="120">7</td>
-      <td align="center" width="120">8</td>
-    </tr>
-    <tr>
-      <td align="center" width="120"><a href="#1-캐릭터">캐릭터</a></td>
-      <td align="center" width="120"><a href="#2-맵">맵</a></td>
-      <td align="center" width="120"><a href="#3-버프">버프</a></td>
-      <td align="center" width="120"><a href="#4-상점">상점</a></td>
-      <td align="center" width="120"><a href="#5-업적">업적</a></td>
-      <td align="center" width="120"><a href="#6-튜토리얼">튜토리얼</a></td>
-      <td align="center" width="120"><a href="#7-로딩-씬">로딩 씬</a></td>
-      <td align="center" width="120"><a href="#8-기타">기타</a></td>
-    </tr>
-  </table>
-
-- [트러블슈팅](#트러블슈팅)
+1. [프로젝트 장르 및 소개](#프로젝트-장르-및-소개)
+2. [주요기능](#주요기능)
+3. [역할분담](#역할분담)
+4. [구현내용](#구현내용)
+5. [트러블슈팅](#트러블슈팅)
+6. [기술스택](#기술스택)
+7. [사용에셋 목록](#사용에셋-목록)
 
 ---
 
-## [발표 자료 & 문서]
+## 프로젝트 장르 및 소개
 
 <table>
   <tr>
-    <th align="left" width="180">구분</th>
-    <th align="left" width="500">링크</th>
+    <th align="left" width="180"> 항목 </th>
+    <th align="left" width="500"> 내용 </th>
   </tr>
-  <tr>
-    <td>PPT (Google Slide)</td>
-    <td><a href="https://docs.google.com/presentation/d/1gX0cmWSwRL__9r7DIlhT5A_V4X4Zgh1L2HGvngP8aHA/edit?usp=sharing">열기</a></td>
-  </tr>
-  <tr>
-    <td>Figma</td>
-    <td><a href="https://www.figma.com/embed/interstitial?embed_host=notion&embed_path=%2Fdesign%2FbHepgffXRgt0oKv4IvhP9q%2F%2525EA%2525B2%25258C%2525EC%25259E%252584-%2525EA%2525B0%25259C%2525EB%2525B0%25259C-%2525EC%252588%252599%2525EB%2525A0%2525A8%3Fembed-host%3Dnotion%26footer%3D0%26kind%3Dfile%26node-id%3D0-1%26page-selector%3D1%26theme%3Dsystem%26version%3D2%26viewer%3D1&theme=system&version=2">열기</a></td>
-  </tr>
+  <tr><td> 장르 </td><td> 횡스크롤 3D 러닝 액션 게임 </td></tr>
+  <tr><td> 소개 </td><td> 좌우와 점프, 슬라이드 조작을 통해 장애물들을 피해 달리면서 돈을 먹어 점수를 올리는 게임 </td></tr>
+  <tr><td> 개발 기간 </td><td> 총 7일 { 2025.11.14 ~ 2025.11.21 } </td></tr>
 </table>
 
-## [프로젝트 개요]
-
-<table>
-  <tr>
-    <th align="left" width="180">항목</th>
-    <th align="left" width="500">내용</th>
-  </tr>
-  <tr><td>프로젝트명</td><td>ThreadRun</td></tr>
-  <tr><td>주제</td><td>3D 달리기</td></tr>
-  <tr><td>개발 인원</td><td>총 5명 (개발자)</td></tr>
-  <tr><td>개발 기간</td><td>2025.11.14 ~ 2025.11.21 (총 7일)</td></tr>
-  <tr><td>개발 목적</td><td>Unity 3d 실습</td></tr>
-</table>
-
-## [프로젝트 설명]
-
-### 1. Tech Stack
-
-<table>
-  <tr>
-    <th align="left" width="180">구분</th>
-    <th align="left" width="500">기술</th>
-  </tr>
-  <tr>
-    <td>Language</td>
-    <td><img src="https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white"></td>
-  </tr>
-  <tr>
-    <td>Framework</td>
-    <td><img src="https://img.shields.io/badge/unity-FFFFFF?style=for-the-badge&logo=unity&logoColor=black"></td>
-  </tr>
-  <tr>
-    <td>IDE</td>
-    <td><img src="https://img.shields.io/badge/Visual%20Studio-5C2D91?style=for-the-badge&logo=visualstudio&logoColor=white"></td>
-  </tr>
-  <tr>
-    <td>Version Control</td>
-    <td><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></td>
-  </tr>
-  <tr>
-    <td>Design</td>
-    <td><img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"></td>
-  </tr>
-  <tr>
-    <td>Documentation</td>
-    <td><img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white"></td>
-  </tr>
-</table>
+* [저장소 원본 링크](https://github.com/shin0112/ThreadKidRun)
 
 ---
 
-### 2. 와이어프레임
+## 주요기능
+### 게임플레이
+- 게임 시작 시에 튜토리얼을 통해 조작법을 설명 받으면서 게임이 진행.
+- 좌우 이동과 점프, 슬라이드 기능을 통해 장애물을 회피하고 돈을 먹어 점수를 획득.
+- 아이템의 종류는 무적과 스피드가 있으며 획득 시 일시적으로 종류에 맞는 버프가 발동.
+- 획득한 돈으로 캐릭터 스킨을 구매할 수 있는 상점이 존재하며 스킨 적용이 가능.
+- 획득한 돈, 사용된 아이템, 구매한 캐릭터 스킨의 개수에 따른 업적 해금 시스템이 존재.
 
-![와이어프레임](Docs/Img/Wireframe.png)
 
----
 
 ## [코드 설명]
 
