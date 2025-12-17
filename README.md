@@ -511,204 +511,80 @@
   
   </details>
 
-* #### UI 반영
+* #### 업적 UI
 
   <details>
-    <summary> UIManager.cs </summary>
+    <summary> AchievementUI.cs </summary>
 
     ```csharp
-    // ============================================
-    using GameName.Managers;  //오디오연결
-    using System.Collections.Generic;
-    using System.Linq;
     using UnityEngine;
-    // ============================================
+    using UnityEngine.UI;
+    using TMPro;
     
-    public class UIManager : MonoBehaviour
+    public class AchievementUI : MonoBehaviour
     {
-        private static UIManager _instance;
-        public static UIManager Instance => _instance;
+        [Header("UI References")]
+        [Tooltip("이 UI가 나타내는 AchievementData (인스펙터에서 연결)")]
+        public AchievementData linkedAchievement;
     
-        [Header("공통")]
-        [SerializeField] private CoinUI _totalCoinUI;
-        [SerializeField] private ScoreUI _scoreUI;
-        [SerializeField] private ShopUI _shopUI;
-        [SerializeField] private TutorialUI _tutorialUI;
-        public CoinUI CoinUI => _totalCoinUI;
-        public ShopUI ShopUI => _shopUI;
-        public TutorialUI TutorialUI => _tutorialUI;
+        [Tooltip("색상을 변경할 UI 이미지 컴포넌트")]
+        public Image imageToChange;
     
-        [Header("팝업창")]
-        [SerializeField] private SettingUI _settingUI;
-        [SerializeField] private PauseUI _pauseUI;
-        [SerializeField] private GameOverUI _gameOverUI;
-        [SerializeField] private GameObject _archievementUI;
+        [Header("Color Settings")]
+        public Color lockedColor = Color.gray; // 잠금 상태일 때의 색상
+        public Color unlockedColor = Color.yellow; // 해금 상태일 때의 색상
     
-        [Header("텍스트")]
-        [SerializeField] private GameObject _startText;
+        [Header("업적 이름")]
+        public TextMeshProUGUI titleText;
     
-        // 씬 로드 모드
-        private UIMode _curLoadMode = UIMode.Default;
-        public UIMode CurLoadMode
-        {
-            get { return _curLoadMode; }
-            set { _curLoadMode = value; }
-        }
-    
-        // 카메라
-        private Camera _mainCamera;
-        public Camera Camera
-        {
-            get { return _mainCamera; }
-            set { _mainCamera = value; }
-        }
-    
-        private void Reset()
-        {
-            _settingUI = transform.FindChild<SettingUI>("SettingWindow");
-            _pauseUI = transform.FindChild<PauseUI>("PauseWindow");
-            _gameOverUI = transform.FindChild<GameOverUI>("GameOverWindow");
-            _totalCoinUI = transform.FindChild<CoinUI>("TotalCoin");
-            _scoreUI = transform.FindChild<ScoreUI>("Score");
-            _shopUI = transform.FindChild<ShopUI>("Shop");
-            _tutorialUI = transform.FindChild<TutorialUI>("Tutorial");
-            _archievementUI = transform.FindChild<Transform>("AchievementCanvas").gameObject;
-    
-            _startText = transform.FindChild<Transform>("StartText").gameObject;
-        }
-    
-        private void Awake()
-        {
-            if (_instance != null && _instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-    
-            _instance = this;
-            Init();
-    
-            // camera
-            _mainCamera = Camera.main;
-        }
+        [Header("업적 설명")]
+        public TextMeshProUGUI descriptionText;
     
         private void Start()
         {
-            // event
-            GameManager.Instance.OnScoreChanged += ScoreEvents;
-    
-            SetDefaultMode();
-    
-            // ============================================
-            if (AudioManager.Instance != null)
-            {
-                AudioManager.Instance.PlayBGM("BGM_MainTheme");
-            }
-            // ============================================
+            titleText.text = linkedAchievement.achievementName;
+            descriptionText.text = linkedAchievement.description;
         }
     
-        private void Update()
+        private void OnEnable()
         {
-            if (_startText.activeSelf && Input.GetKeyDown(KeyCode.Space))
+            // AchievementManager의 이벤트에 구독합니다.
+            AchievementManager.OnAchievementUnlocked += HandleAchievementUnlocked;
+    
+            // 초기 상태 설정
+            if (imageToChange != null && linkedAchievement != null)
             {
-                SetGameMode();
+                imageToChange.color = linkedAchievement.IsUnlocked ? unlockedColor : lockedColor;
             }
         }
     
-        private void OnDestroy()
+        private void OnDisable()
         {
-            GameManager.Instance.OnScoreChanged -= ScoreEvents;
+            // 이벤트 구독을 해지합니다.
+            AchievementManager.OnAchievementUnlocked -= HandleAchievementUnlocked;
         }
     
-        /// <summary>
-        /// 씬 초기화
-        /// </summary>
-        private List<IUIActive> _uiActives = new();
-        private void Init()
+        // 업적 해금 이벤트가 발생했을 때 호출됩니다.
+        private void HandleAchievementUnlocked(AchievementData unlockedData)
         {
-            _uiActives.Clear();
-            _uiActives = GetComponentsInChildren<IUIActive>().ToList();
-        }
-    
-        /// <summary>
-        /// 점수 관련 이벤트
-        /// </summary>
-        /// <param name="value"></param>
-        private void ScoreEvents(int value)
-        {
-            _scoreUI.UpdateCurrentScore(value);
-        }
-    
-        public void SetSceneLoadMode()
-        {
-            switch (_curLoadMode)
+            // 이벤트로 전달된 업적 데이터가 현재 이 UI가 연결된 업적 데이터와 일치하는지 확인합니다.
+            if (unlockedData == linkedAchievement)
             {
-                case UIMode.Default:
-                    SetDefaultMode();
-                    break;
-                case UIMode.Shop:
-                    SetShopMode();
-                    break;
+                UpdateUI();
             }
         }
     
-        #region Window On/Off
-        /// <summary>
-        /// 설정창 여닫기
-        /// </summary>
-        public void ToggleSettingUI()
+        private void UpdateUI()
         {
-            _settingUI.gameObject.Toggle();
-        }
-    
-        /// <summary>
-        /// 일시정지창 여닫기
-        /// </summary>
-        public void TogglePauseUI()
-        {
-            _pauseUI.gameObject.Toggle();
-    
-            // 켜질 경우 점수 업데이트
-            if (_pauseUI.gameObject.activeSelf)
+            if (imageToChange != null)
             {
-                _pauseUI.UpdateCurrentScoreText(_scoreUI.CurScore);
+                // 이미지 색상을 해금 상태 색상으로 변경
+                imageToChange.color = unlockedColor;
+    
+                // 해금 시 애니메이션, 소리 재생 등의 추가 로직을 여기에 삽입
+                Debug.Log($"UI 업데이트: {linkedAchievement.achievementName} 해금됨.");
             }
         }
-    
-        public void ToggleArchievementUI()
-        {
-            _archievementUI.gameObject.Toggle();
-        }
-    
-        public void ShowGameOverWindow()
-        {
-            _gameOverUI.gameObject.SetActive(true);
-        }
-        #endregion  
-    
-        #region 게임 오브젝트 On/Off
-        public void SetGameMode()
-        {
-            _uiActives.ForEach(ui => ui.SetMode(UIMode.Game));
-            _startText.SetActive(false);
-        }
-    
-        public void SetDefaultMode()
-        {
-            _uiActives.ForEach(ui => ui.SetMode(UIMode.Default));
-            _startText.SetActive(true);
-            _mainCamera.gameObject.SetActive(true);
-            AudioManager.Instance?.PlayBGM("BGM_MainTheme");
-        }
-    
-        public void SetShopMode()
-        {
-            _uiActives.ForEach(ui => ui.SetMode(UIMode.Shop));
-            _startText.SetActive(false);
-            _mainCamera.gameObject.SetActive(false);
-            AudioManager.Instance?.PlayBGM("BGM_Shop");
-        }
-        #endregion
     }
     ```
   
