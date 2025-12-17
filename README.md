@@ -514,7 +514,7 @@
 * #### UI 반영
 
   <details>
-    <summary> ProjectileManager.cs </summary>
+    <summary> UIManager.cs </summary>
 
     ```csharp
     // ============================================
